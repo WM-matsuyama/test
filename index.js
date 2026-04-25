@@ -389,45 +389,45 @@
   // Display the initial scene.
   switchScene(scenes[0]);
 
-(function () {
-    var gyroButton = document.querySelector('#gyro-button');
-    var controls = viewer.controls();
+(function() {
+  var gyroButton = document.querySelector('#gyro-button');
+  var controls = viewer.controls();
+  
+  // 1. ジャイロ制御メソッドを作成
+  var deviceOrientationControlMethod = new Marzipano.DeviceOrientationControlMethod();
+  
+  // 2. ビューワーに登録（この時点ではまだ無効）
+  controls.addMethod('deviceOrientation', deviceOrientationControlMethod);
 
-    // 1. ジャイロ制御メソッドを作成
-    var deviceOrientationControlMethod = new Marzipano.DeviceOrientationControlMethod();
-
-    // 2. ビューワーに登録（この時点ではまだ無効）
-    controls.addMethod('deviceOrientation', deviceOrientationControlMethod);
-
-    // ジャイロ切り替え関数
-    function toggleGyro() {
-        if (deviceOrientationControlMethod.getEnabled()) {
-            deviceOrientationControlMethod.disable();
-            gyroButton.innerText = "ジャイロをONにする";
-        } else {
-            deviceOrientationControlMethod.enable();
-            gyroButton.innerText = "ジャイロをOFFにする";
-        }
+  // ジャイロ切り替え関数
+  function toggleGyro() {
+    if (deviceOrientationControlMethod.getEnabled()) {
+      deviceOrientationControlMethod.disable();
+      gyroButton.innerText = "ジャイロをONにする";
+    } else {
+      deviceOrientationControlMethod.enable();
+      gyroButton.innerText = "ジャイロをOFFにする";
     }
+  }
 
-    // ボタンクリック時の処理
-    gyroButton.addEventListener('click', function () {
-        // iOS (iOS 13以上) の場合は許可を求める必要がある
-        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-            DeviceOrientationEvent.requestPermission()
-                .then(function (response) {
-                    if (response === 'granted') {
-                        toggleGyro();
-                    } else {
-                        alert('ジャイロの使用が許可されませんでした');
-                    }
-                })
-                .catch(function (error) {
-                    console.error(error);
-                });
-        } else {
-            // Android や iOS 13未満などの場合
+  // ボタンクリック時の処理
+  gyroButton.addEventListener('click', function() {
+    // iOS (iOS 13以上) の場合は許可を求める必要がある
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission()
+        .then(function(response) {
+          if (response === 'granted') {
             toggleGyro();
-        }
-    });
+          } else {
+            alert('ジャイロの使用が許可されませんでした');
+          }
+        })
+        .catch(function(error) {
+          console.error(error);
+        });
+    } else {
+      // Android や iOS 13未満などの場合
+      toggleGyro();
+    }
+  });
 })();
