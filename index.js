@@ -70,7 +70,6 @@
   // Initialize viewer.
   var viewer = new Marzipano.Viewer(panoElement, viewerOpts);
 
-  // --- 修正版：ジャイロ実装 ---
 (function() {
   // もしMarzipanoにジャイロ機能が入っていなければ、外部から読み込む
   if (!Marzipano.DeviceOrientationControlMethod) {
