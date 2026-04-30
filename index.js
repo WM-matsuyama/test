@@ -70,63 +70,6 @@
   // Initialize viewer.
   var viewer = new Marzipano.Viewer(panoElement, viewerOpts);
 
-(function() {
-  // もしMarzipanoにジャイロ機能が入っていなければ、外部から読み込む
-  if (!Marzipano.DeviceOrientationControlMethod) {
-    var script = document.createElement('script');
-    script.src = 'https://www.marzipano.net/demos/common/DeviceOrientationControlMethod.js';
-    document.head.appendChild(script);
-    script.onload = initGyro;
-  } else {
-    initGyro();
-  }
-
-  function initGyro() {
-    var gyroButton = document.querySelector('#gyro-button');
-    if (!gyroButton || !viewer) return;
-
-    var deviceOrientationControlMethod = new Marzipano.DeviceOrientationControlMethod();
-    var controls = viewer.controls();
-    controls.addMethod('deviceOrientation', deviceOrientationControlMethod);
-
-    gyroButton.addEventListener('click', function() {
-      // センサーの許可（iOSおよび最新Android用）
-      if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-        DeviceOrientationEvent.requestPermission().then(function(state) {
-          if (state === 'granted') {
-            toggle();
-          }
-        }).catch(console.error);
-      } else {
-        // 通常のAndroid
-        toggle();
-      }
-    });
-
-    function toggle() {
-      if (deviceOrientationControlMethod.getEnabled()) {
-        deviceOrientationControlMethod.disable();
-        gyroButton.innerText = "ジャイロON";
-      } else {
-        deviceOrientationControlMethod.enable();
-        gyroButton.innerText = "ジャイロOFF";
-      }
-    }
-  }
-})();
-
-    function toggle() {
-      if (deviceOrientationControlMethod.getEnabled()) {
-        deviceOrientationControlMethod.disable();
-        gyroButton.innerText = "ジャイロON";
-      } else {
-        deviceOrientationControlMethod.enable();
-        gyroButton.innerText = "ジャイロOFF";
-      }
-    }
-  }
-})();
-  
   // Create scenes.
   var scenes = data.scenes.map(function(data) {
     var urlPrefix = "tiles";
